@@ -4,47 +4,47 @@ import cv2
 import os
 import time
 
-# ÃÔ¿µ °£°İ(ÃÊ) ¹× ±â°£(ÀÏ)
-interval_seconds = 30 * 60  # 30ºĞ °£°İ
+# ì´¬ì˜ ê°„ê²©(ì´ˆ) ë° ê¸°ê°„(ì¼)
+interval_seconds = 30 * 60  # 30ë¶„ ê°„ê²©
 duration_days = 5
 
-# ÀúÀåÇÒ ÀÌ¹ÌÁö Æú´õ °æ·Î
+# ì €ì¥í•  ì´ë¯¸ì§€ í´ë” ê²½ë¡œ
 image_folder = 'images'
 
-# ÀÌ¹ÌÁö ÀúÀå °æ·Î°¡ ¾øÀ¸¸é »ı¼º
+# ì´ë¯¸ì§€ ì €ì¥ ê²½ë¡œê°€ ì—†ìœ¼ë©´ ìƒì„±
 if not os.path.exists(image_folder):
     os.makedirs(image_folder)
 
-# ºñµğ¿À »ı¼ºÀ» À§ÇÑ ¼³Á¤
-frame_width = 1920  # ºñµğ¿À ÇÁ·¹ÀÓ ³Êºñ
-frame_height = 1080  # ºñµğ¿À ÇÁ·¹ÀÓ ³ôÀÌ
+# ë¹„ë””ì˜¤ ìƒì„±ì„ ìœ„í•œ ì„¤ì •
+frame_width = 1920  # ë¹„ë””ì˜¤ í”„ë ˆì„ ë„ˆë¹„
+frame_height = 1080  # ë¹„ë””ì˜¤ í”„ë ˆì„ ë†’ì´
 video_filename = 'timelapse.avi'
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
 out = cv2.VideoWriter(video_filename, fourcc, 20.0, (frame_width, frame_height))
 
-# ÃÔ¿µ ½ÃÀÛ ½Ã°£
+# ì´¬ì˜ ì‹œì‘ ì‹œê°„
 start_time = time.time()
 
-# Å¸ÀÓ·¦½º »ı¼º
+# íƒ€ì„ë©ìŠ¤ ìƒì„±
 for day in range(1, duration_days + 1):
     for hour in range(0, 24):
         for minute in range(0, 60):
             timestamp = time.time() - start_time
             image_filename = f'{image_folder}/{day:02d}_{hour:02d}_{minute:02d}.jpg'
             
-            # ÀÌ¹ÌÁö ÃÔ¿µ ¹× ÀúÀå
-            # ½ÇÁ¦·Î Ä«¸Ş¶ó¸¦ »ç¿ëÇÏ¿© ÀÌ¹ÌÁö¸¦ ÃÔ¿µÇÏ´Â ÄÚµå¸¦ Ãß°¡ÇØ¾ß ÇÕ´Ï´Ù.
-            # ¿©±â¼­´Â ÀÌ¹ÌÁö¸¦ ¸¸µéÁö ¾Ê°í ÆÄÀÏ¸í¸¸ Ãâ·ÂÇÕ´Ï´Ù.
+            # ì´ë¯¸ì§€ ì´¬ì˜ ë° ì €ì¥
+            # ì‹¤ì œë¡œ ì¹´ë©”ë¼ë¥¼ ì‚¬ìš©í•˜ì—¬ ì´ë¯¸ì§€ë¥¼ ì´¬ì˜í•˜ëŠ” ì½”ë“œë¥¼ ì¶”ê°€í•´ì•¼ í•©ë‹ˆë‹¤.
+            # ì—¬ê¸°ì„œëŠ” ì´ë¯¸ì§€ë¥¼ ë§Œë“¤ì§€ ì•Šê³  íŒŒì¼ëª…ë§Œ ì¶œë ¥í•©ë‹ˆë‹¤.
             print(f'Saved: {image_filename}')
 
-            # ÀÌ¹ÌÁö¸¦ ºñµğ¿À¿¡ Ãß°¡
+            # ì´ë¯¸ì§€ë¥¼ ë¹„ë””ì˜¤ì— ì¶”ê°€
             img = cv2.imread(image_filename)
             out.write(img)
 
-            # ÃÔ¿µ °£°İ¸¸Å­ ´ë±â
+            # ì´¬ì˜ ê°„ê²©ë§Œí¼ ëŒ€ê¸°
             time.sleep(interval_seconds)
 
-# ºñµğ¿À ÆÄÀÏ ´İ±â
+# ë¹„ë””ì˜¤ íŒŒì¼ ë‹«ê¸°
 out.release()
 
-print('Å¸ÀÓ·¦½º ºñµğ¿À »ı¼ºÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.')
+print('íƒ€ì„ë©ìŠ¤ ë¹„ë””ì˜¤ ìƒì„±ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.')

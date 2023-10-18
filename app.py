@@ -7,12 +7,12 @@ import time
 
 app = Flask(__name)
 
-# ÀúÀåÇÒ ÀÌ¹ÌÁö Æú´õ °æ·Î
+# ì €ì¥í•  ì´ë¯¸ì§€ í´ë” ê²½ë¡œ
 image_folder = 'images'
 if not os.path.exists(image_folder):
     os.makedirs(image_folder)
 
-# ÃÔ¿µ ÁßÀÎÁö ¿©ºÎ
+# ì´¬ì˜ ì¤‘ì¸ì§€ ì—¬ë¶€
 shooting = False
 
 @app.route('/', methods=['GET', 'POST'])
@@ -22,10 +22,10 @@ def index():
     if request.method == 'POST':
         if request.form.get('start'):
             shooting = True
-            interval_seconds = int(request.form['interval'])  # »ç¿ëÀÚ ÀÔ·ÂÀ¸·Î °£°İ ¼³Á¤
-            duration_days = int(request.form['duration'])  # »ç¿ëÀÚ ÀÔ·ÂÀ¸·Î ±â°£ ¼³Á¤
-            frame_width = 1920  # ºñµğ¿À ÇÁ·¹ÀÓ ³Êºñ
-            frame_height = 1080  # ºñµğ¿À ÇÁ·¹ÀÓ ³ôÀÌ
+            interval_seconds = int(request.form['interval'])  # ì‚¬ìš©ì ì…ë ¥ìœ¼ë¡œ ê°„ê²© ì„¤ì •
+            duration_days = int(request.form['duration'])  # ì‚¬ìš©ì ì…ë ¥ìœ¼ë¡œ ê¸°ê°„ ì„¤ì •
+            frame_width = 1920  # ë¹„ë””ì˜¤ í”„ë ˆì„ ë„ˆë¹„
+            frame_height = 1080  # ë¹„ë””ì˜¤ í”„ë ˆì„ ë†’ì´
             video_filename = 'timelapse.avi'
             fourcc = cv2.VideoWriter_fourcc(*'XVID')
             out = cv2.VideoWriter(video_filename, fourcc, 20.0, (frame_width, frame_height))
@@ -34,19 +34,19 @@ def index():
             while shooting:
                 timestamp = time.time() - start_time
                 image_filename = f'{image_folder}/{int(timestamp)}.jpg'
-                # ÀÌ¹ÌÁö ÃÔ¿µ ¹× ÀúÀå (½ÇÁ¦ ÇÏµå¿ş¾î¿¡ ¸Â°Ô ÄÚµå Ãß°¡)
+                # ì´ë¯¸ì§€ ì´¬ì˜ ë° ì €ì¥ (ì‹¤ì œ í•˜ë“œì›¨ì–´ì— ë§ê²Œ ì½”ë“œ ì¶”ê°€)
                 time.sleep(interval_seconds)
                 img = cv2.imread(image_filename)
                 out.write(img)
                 if timestamp >= duration_days * 24 * 60 * 60:
                     shooting = False
                     out.release()
-                    print('Å¸ÀÓ·¦½º ºñµğ¿À »ı¼ºÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.')
+                    print('íƒ€ì„ë©ìŠ¤ ë¹„ë””ì˜¤ ìƒì„±ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.')
 
         elif request.form.get('stop'):
             shooting = False
             out.release()
-            print('Å¸ÀÓ·¦½º ºñµğ¿À »ı¼ºÀÌ ÁßÁöµÇ¾ú½À´Ï´Ù.')
+            print('íƒ€ì„ë©ìŠ¤ ë¹„ë””ì˜¤ ìƒì„±ì´ ì¤‘ì§€ë˜ì—ˆìŠµë‹ˆë‹¤.')
 
     return render_template('index.html', shooting=shooting)
 
