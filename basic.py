@@ -1,4 +1,5 @@
 # https://github.com/hisarms96/TimelapsePy.git
+# pip install opencv-python
 import cv2
 import os
 import time
