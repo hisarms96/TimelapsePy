@@ -1,9 +1,10 @@
-# https://github.com/hisarms96/TimelapsePy.git
-#pip install flask
 from flask import Flask, render_template, request, redirect, url_for
 import cv2
 import os
 import time
+
+# https://github.com/hisarms96/TimelapsePy.git
+#pip install flask
 
 app = Flask(__name)
 
