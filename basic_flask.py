@@ -7,26 +7,13 @@ import time
 
 app = Flask(__name)
 
-# 촬영 간격(초) 및 기간(일)
-interval_seconds = 30 * 60  # 30분 간격
-duration_days = 5
-
 # 저장할 이미지 폴더 경로
 image_folder = 'images'
-
-# 비디오 생성을 위한 설정
-frame_width = 1920  # 비디오 프레임 너비
-frame_height = 1080  # 비디오 프레임 높이
-video_filename = 'timelapse.avi'
-fourcc = cv2.VideoWriter_fourcc(*'XVID')
-out = cv2.VideoWriter(video_filename, fourcc, 20.0, (frame_width, frame_height)
+if not os.path.exists(image_folder):
+    os.makedirs(image_folder)
 
 # 촬영 중인지 여부
 shooting = False
-
-# 이미지 저장 경로가 없으면 생성
-if not os.path.exists(image_folder):
-    os.makedirs(image_folder)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -35,6 +22,14 @@ def index():
     if request.method == 'POST':
         if request.form.get('start'):
             shooting = True
+            interval_seconds = int(request.form['interval'])  # 사용자 입력으로 간격 설정
+            duration_days = int(request.form['duration'])  # 사용자 입력으로 기간 설정
+            frame_width = 1920  # 비디오 프레임 너비
+            frame_height = 1080  # 비디오 프레임 높이
+            video_filename = 'timelapse.avi'
+            fourcc = cv2.VideoWriter_fourcc(*'XVID')
+            out = cv2.VideoWriter(video_filename, fourcc, 20.0, (frame_width, frame_height))
+
             start_time = time.time()
             while shooting:
                 timestamp = time.time() - start_time
@@ -43,10 +38,15 @@ def index():
                 time.sleep(interval_seconds)
                 img = cv2.imread(image_filename)
                 out.write(img)
+                if timestamp >= duration_days * 24 * 60 * 60:
+                    shooting = False
+                    out.release()
+                    print('타임랩스 비디오 생성이 완료되었습니다.')
+
         elif request.form.get('stop'):
             shooting = False
             out.release()
-            print('타임랩스 비디오 생성이 완료되었습니다.')
+            print('타임랩스 비디오 생성이 중지되었습니다.')
 
     return render_template('index.html', shooting=shooting)
 

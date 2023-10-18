@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>≈∏¿”∑¶Ω∫ ¿• æ€</title>
+</head>
+<body>
+    <h1>≈∏¿”∑¶Ω∫ ¿• æ€</h1>
+    
+    <form method="POST">
+        <label for="interval">√‘øµ ∞£∞›(√ ):</label>
+        <input type="number" name="interval" value="1800" required>
+        <br>
+        <label for="duration">√‘øµ ±‚∞£(¿œ):</label>
+        <input type="number" name="duration" value="5" required>
+        <br>
+        <button type="submit" name="start" {{ "disabled" if shooting }}>Ω√¿€</button>
+        <button type="submit" name="stop" {{ "disabled" if not shooting }}>¡§¡ˆ</button>
+    </form>
+    
+    <p>
+        {% if shooting %}
+        ≈∏¿”∑¶Ω∫ √‘øµ ¡ﬂ...
+        {% else %}
+        √‘øµ ¡ﬂ¡ˆµ .
+        {% endif %}
+    </p>
+</body>
+</html>
